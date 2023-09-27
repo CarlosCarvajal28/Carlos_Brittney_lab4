@@ -126,8 +126,23 @@ void test_out_of_order(void)
 int main (void)
 {
     UNITY_BEGIN();
+    RUN_TEST(test_request);
     RUN_TEST(test_noop);
     RUN_TEST(test_out_of_order);
     RUN_TEST(test_noone_home);
     return UNITY_END();
+}
+
+void signal_handle_calculation(struct k_sem *request, struct k_sem *response, struct signal_data *data)
+{
+
+    k_sem_take(request, K_FOREVER);
+    data->output = data->input + 5;
+    k_sem_give(response);
+}
+
+int signal_request_calculate(struct k_sem *request, struct k_sem *response, struct signal_data *data)
+{
+    k_sem_give(request);
+    k_take_take(response, K_FOREVER);
 }
