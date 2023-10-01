@@ -1,0 +1,2 @@
+This project is intended to familiarize us with message passing and signaling using semaphores
+![example workflow](https://github.com/CarlosCarvajal28/Carlos_Brittney_lab4/actions/workflows/main.yml/badge.svg)
