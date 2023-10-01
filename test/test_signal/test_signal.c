@@ -12,6 +12,13 @@ void tearDown(void) {}
 
 K_THREAD_STACK_DEFINE(coop_stack, STACKSIZE);
 
+void stupid_ashton(struct k_sem *request, struct k_sem *response, struct signal_data *data){
+    while(1){
+        signal_handle_calculation(request,
+                    response,
+                    data);
+    }
+}
 
 void test_request(void)
 {
@@ -25,7 +32,7 @@ void test_request(void)
     k_thread_create(&coop_thread,
                     coop_stack,
                     STACKSIZE,
-                    (k_thread_entry_t) signal_handle_calculation,
+                    (k_thread_entry_t) stupid_ashton,
                     &request,
                     &response,
                     &data,
@@ -138,11 +145,13 @@ void signal_handle_calculation(struct k_sem *request, struct k_sem *response, st
 
     k_sem_take(request, K_FOREVER);
     data->output = data->input + 5;
+    k_sleep(K_MSEC(1));
     k_sem_give(response);
 }
 
 int signal_request_calculate(struct k_sem *request, struct k_sem *response, struct signal_data *data)
 {
     k_sem_give(request);
-    k_take_take(response, K_FOREVER);
+    int res = k_sem_take(response, K_MSEC(1000));
+    return res;
 }
