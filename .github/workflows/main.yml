@@ -15,4 +15,4 @@ jobs:
         run: pip install --upgrade platformio
         
       - name: Run Tests
-        run:  pio run; pio test --environment disco_renode --without-uploading
+        run:  pio run; pio test --environment github_test --without-uploading
